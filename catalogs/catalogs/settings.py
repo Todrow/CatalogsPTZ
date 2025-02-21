@@ -31,13 +31,37 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # default apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # api app
+    'api',
+    # other apps for api
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'django_filters',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # JWT аутентификация
+        'rest_framework.authentication.SessionAuthentication',         # Сессионная аутентификация для браузера
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',  # Разрешения по умолчанию
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',  # Фильтрация
+        'rest_framework.filters.SearchFilter',                # Поиск
+        'rest_framework.filters.OrderingFilter',              # Сортировка
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',  # Пагинация
+    'PAGE_SIZE': 10,  # Размер страницы
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
