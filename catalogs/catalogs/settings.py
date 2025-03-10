@@ -44,14 +44,17 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'django_filters',
+    'drf_spectacular',       # Генератор документации OpenAPI
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',  # JWT аутентификация
-        'rest_framework.authentication.SessionAuthentication',         # Сессионная аутентификация для браузера
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',  # JWT аутентификация
+        # Сессионная аутентификация для браузера
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',  # Аутентификация по токену
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',  # Разрешения по умолчанию
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',  # Разрешения по умолчанию
     ),
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',  # Фильтрация
@@ -60,6 +63,16 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',  # Пагинация
     'PAGE_SIZE': 10,  # Размер страницы
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+# Настройки для drf-spectacular
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'PTZ catalogs API',                               # Название API
+    'DESCRIPTION': 'API для работы с системой каталогов.',  # Описание API
+    'VERSION': '1.0.0',                                           # Версия API
+    # Отключение схемы в ответах API
+    'SERVE_INCLUDE_SCHEMA': False,
 }
 
 MIDDLEWARE = [
@@ -106,6 +119,11 @@ DATABASES = {
         'PORT': 5432,
     }
 }
+
+
+# User model
+
+AUTH_USER_MODEL = 'api.CustomUser'
 
 
 # Password validation
