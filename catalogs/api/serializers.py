@@ -10,19 +10,35 @@ class DetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class FolderSerializer(serializers.ModelSerializer):
-    """Сериализатор для папок"""
+class FolderCreateSerializer(serializers.ModelSerializer):
+    """Сериализатор для создания папок"""
+    IMG = serializers.SlugRelatedField(
+        many=False, read_only=True, slug_field='path')
+    childs = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Folder
-        fields = '__all__'
+        depth = 0
+        fields = ['id', 'tag', 'VIN', 'description', 'parent', 'IMG', 'childs']
+
+
+class FolderReadSerializer(serializers.ModelSerializer):
+    """Сериализатор для чтения папок"""
+    IMG = serializers.SlugRelatedField(
+        many=False, read_only=True, slug_field='path')
+
+    class Meta:
+        model = Folder
+        depth = 1
+        fields = ['id', 'tag', 'VIN', 'description', 'parent', 'IMG', 'childs']
 
 
 class IMGSerializer(serializers.ModelSerializer):
+    hot_points = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = IMG
-        fields = '__all__'
+        fields = ['id', 'folder', 'path', 'hot_points']
 
 
 class Hot_pointSerializer(serializers.ModelSerializer):

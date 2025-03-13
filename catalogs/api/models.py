@@ -18,6 +18,7 @@ class CustomUser(AbstractUser):
         choices=ROLES_CHOICES,
         default=USER
     )
+
     def __str__(self):
         return f'Profile the {self.username}, with role: {self.role}'
 
@@ -29,7 +30,7 @@ class Detail(models.Model):
     note = models.TextField()
     link = models.TextField()
     folder = models.ManyToManyField(
-        to="api.Folder", verbose_name=("parent is folder"))
+        to="api.Folder", verbose_name=("parent is folder"), related_name='details')
 
     def __str__(self):
         return f'Name is: {self.name}, the parent is: {self.folder}'
@@ -39,24 +40,28 @@ class Folder(models.Model):
     tag = models.CharField(max_length=4)
     VIN = models.CharField(max_length=50, null=True)
     description = models.TextField()
-    parent = models.ManyToManyField("api.Folder", verbose_name=("parent"), blank=True)
+    parent = models.ManyToManyField("api.Folder", verbose_name=(
+        "parent"), blank=True, related_name='childs')
 
     def __str__(self):
         return f'{self.tag} with VIN: {self.VIN}'
 
 
 class IMG(models.Model):
-    folder = models.OneToOneField("api.Folder", on_delete=models.CASCADE)
-    path = models.TextField((""))
+    folder = models.OneToOneField(
+        "api.Folder", on_delete=models.CASCADE, related_name='IMG')
+    path = models.TextField((""), blank=False)
 
     def __str__(self):
         return str(str(self.folder) + ": " + self.path)
 
 
 class Hot_point(models.Model):
-    folder_link = models.ForeignKey("api.Folder", on_delete=models.CASCADE)
+    folder_link = models.ForeignKey(
+        "api.Folder", on_delete=models.CASCADE, related_name='hot_points')
     coordinates = ArrayField(base_field=models.IntegerField(("")), size=2)
-    IMG = models.OneToOneField("api.IMG", on_delete=models.CASCADE)
+    IMG = models.ForeignKey(
+        "api.IMG", on_delete=models.CASCADE, related_name='hot_points')
     text = models.TextField((""))
 
     def __str__(self):
@@ -64,8 +69,10 @@ class Hot_point(models.Model):
 
 
 class Count_details(models.Model):
-    folder = models.OneToOneField("api.Folder", on_delete=models.CASCADE)
-    detail = models.ForeignKey("api.Detail", on_delete=models.CASCADE)
+    folder = models.OneToOneField(
+        "api.Folder", on_delete=models.CASCADE, related_name='count_details')
+    detail = models.OneToOneField(
+        "api.Detail", on_delete=models.CASCADE, related_name='count_details')
     count = models.SmallIntegerField((""))
 
     def __str__(self):
