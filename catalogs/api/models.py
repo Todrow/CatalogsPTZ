@@ -1,26 +1,26 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+# from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres.fields import ArrayField
 
 
-class CustomUser(AbstractUser):
+# class CustomUser(AbstractUser):
 
-    ADMIN = "AD"
-    USER = "US"
-    CATALOG = "CG"
-    ROLES_CHOICES = {
-        ADMIN: "Admin",
-        USER: "User",
-        CATALOG: "Catalog",
-    }
-    role = models.CharField(
-        max_length=2,
-        choices=ROLES_CHOICES,
-        default=USER
-    )
+#     ADMIN = "AD"
+#     USER = "US"
+#     CATALOG = "CG"
+#     ROLES_CHOICES = {
+#         ADMIN: "Admin",
+#         USER: "User",
+#         CATALOG: "Catalog",
+#     }
+#     role = models.CharField(
+#         max_length=2,
+#         choices=ROLES_CHOICES,
+#         default=USER
+#     )
 
-    def __str__(self):
-        return f'Profile the {self.username}, with role: {self.role}'
+#     def __str__(self):
+#         return f'Profile the {self.username}, with role: {self.role}'
 
 
 class Detail(models.Model):
@@ -42,6 +42,8 @@ class Folder(models.Model):
     description = models.TextField()
     parent = models.ManyToManyField("api.Folder", verbose_name=(
         "parent"), blank=True, related_name='childs')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.tag} with VIN: {self.VIN}'
