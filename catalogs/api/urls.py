@@ -1,11 +1,11 @@
 from django.urls import path
-from .views import DetailViewSet, FolderCreateSet, signup_view, login_view, FolderList, FolderGetById, IMGCreate, IMGGetById, HotPointCreate, HotPointOnIMGList
+from .views import DetailViewSet, FolderCreateSet, FolderList, FolderGetById, IMGCreate, IMGGetById, HotPointCreate, HotPointOnIMGList
 
 
 urlpatterns = [
     # Sing up/in
-    path('signup/', signup_view, name='signup'),
-    path('login/', login_view, name='login'),
+#     path('signup/', signup_view, name='signup'),
+#     path('login/', login_view, name='login'),
     # Details
     path('create_details/', DetailViewSet.as_view(), name='detail-creater'),
     # Folders

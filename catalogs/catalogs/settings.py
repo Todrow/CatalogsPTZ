@@ -123,7 +123,7 @@ DATABASES = {
 
 # User model
 
-AUTH_USER_MODEL = 'api.CustomUser'
+# AUTH_USER_MODEL = 'api.CustomUser'
 
 
 # Password validation
