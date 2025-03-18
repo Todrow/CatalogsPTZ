@@ -7,7 +7,7 @@ from .models import Detail, Folder, IMG, Hot_point, Count_details
 from .serializers import DetailSerializer, FolderCreateSerializer, FolderReadSerializer, IMGSerializer, Hot_pointSerializer, Count_detailsSerializer
 from .permissions import IsOwnerOrReadOnly
 from rest_framework.views import APIView
-from django.contrib.auth import login, authenticate
+# from django.contrib.auth import login, authenticate
 # from .forms import SignUpForm, LoginForm
 
 
