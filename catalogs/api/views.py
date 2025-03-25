@@ -7,6 +7,7 @@ from .models import Detail, Folder, IMG, Hot_point, Count_details
 from .serializers import DetailSerializer, FolderCreateSerializer, FolderReadSerializer, IMGSerializer, Hot_pointSerializer, Count_detailsSerializer
 from .permissions import IsOwnerOrReadOnly
 from rest_framework.views import APIView
+from rest_framework import generics
 # from django.contrib.auth import login, authenticate
 # from .forms import SignUpForm, LoginForm
 
@@ -47,14 +48,12 @@ from rest_framework.views import APIView
 
 class DetailViewSet(APIView):
     """Представление для деталей"""
-    # queryset = Detail.objects.all()
     serializer_class = DetailSerializer
-    # permission_classes = [IsOwnerOrReadOnly]
-    filter_backends = [DjangoFilterBackend,
-                       filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['folder__tag', 'folder__VIN', 'folder__parent']
-    search_fields = ['name', 'designation']
-    ordering_fields = ['count_details__count']
+    # filter_backends = [DjangoFilterBackend,
+    #                    filters.SearchFilter, filters.OrderingFilter]
+    # filterset_fields = ['folder__tag', 'folder__VIN', 'folder__parent']
+    # search_fields = ['name', 'designation']
+    # ordering_fields = ['count_details__count']
 
     def post(self, request):
         serializer_for_detail = self.serializer_class(
@@ -85,13 +84,24 @@ class FolderList(APIView):
         return Response(data=serializer_for_folder.data, status=status.HTTP_200_OK)
 
 
-class FolderGetById(APIView):
+class FolderGetById(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Folder.objects.all()
     serializer_class = FolderReadSerializer
 
-    def get(self, request, folder_id):
-        qureyset = Folder.objects.get(id=folder_id)
+    # def get(self, request, folder_id):
+    #     qureyset = Folder.objects.get(id=folder_id)
+    #     serializer_for_folder = self.serializer_class(
+    #         instance=qureyset, many=False)
+    #     return Response(data=serializer_for_folder.data, status=status.HTTP_200_OK)
+
+
+class FolderGetByTag(APIView):
+    serializer_class = FolderReadSerializer
+
+    def get(self, request, folder_tag):
+        qureyset = Folder.objects.get(tag=folder_tag)
         serializer_for_folder = self.serializer_class(
-            instance=qureyset, many=False)
+            instance=qureyset, many=True)
         return Response(data=serializer_for_folder.data, status=status.HTTP_200_OK)
 
 

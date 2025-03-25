@@ -169,3 +169,7 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+Описание для взаимодействия с API клиентского интерфейса.docx
+catalogs/api/migrations/

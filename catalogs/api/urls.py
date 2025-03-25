@@ -1,18 +1,17 @@
 from django.urls import path
-from .views import DetailViewSet, FolderCreateSet, FolderList, FolderGetById, IMGCreate, IMGGetById, HotPointCreate, HotPointOnIMGList
+from .views import DetailViewSet, FolderCreateSet, FolderList, FolderGetById, FolderGetByTag, IMGCreate, IMGGetById, HotPointCreate, HotPointOnIMGList
 
 
 urlpatterns = [
-    # Sing up/in
-#     path('signup/', signup_view, name='signup'),
-#     path('login/', login_view, name='login'),
     # Details
     path('create_details/', DetailViewSet.as_view(), name='detail-creater'),
     # Folders
     path('create_folders/', FolderCreateSet.as_view(), name='folder-creater'),
     path('folders/', FolderList.as_view(), name='folder-list'),
-    path('folder/<int:folder_id>/',
+    path('folder/<int:pk>/',
          view=FolderGetById.as_view(), name='get-folder-on-id'),
+    path('folder/tag/<int:folder_tag>/',
+         view=FolderGetByTag.as_view(), name='get-folder-on-tag'),
     # IMG
     path('create_IMG/', IMGCreate.as_view(), name='img-creater'),
     path('IMG/<int:img_id>/',
