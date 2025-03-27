@@ -18,7 +18,7 @@ class Detail(models.Model):
 class Folder(models.Model):
     tag = models.CharField(max_length=4)
     VIN = models.CharField(max_length=50, null=True)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     parent = models.ManyToManyField("api.Folder", verbose_name=(
         "parent"), blank=True, related_name='childs')
     created_at = models.DateTimeField(auto_now_add=True)
