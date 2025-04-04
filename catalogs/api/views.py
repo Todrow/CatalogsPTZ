@@ -88,21 +88,31 @@ class FolderGetById(generics.RetrieveUpdateDestroyAPIView):
     queryset = Folder.objects.all()
     serializer_class = FolderReadSerializer
 
-    # def get(self, request, folder_id):
-    #     qureyset = Folder.objects.get(id=folder_id)
-    #     serializer_for_folder = self.serializer_class(
-    #         instance=qureyset, many=False)
-    #     return Response(data=serializer_for_folder.data, status=status.HTTP_200_OK)
-
 
 class FolderGetByTag(APIView):
     serializer_class = FolderReadSerializer
 
     def get(self, request, folder_tag):
-        qureyset = Folder.objects.get(tag=folder_tag)
-        serializer_for_folder = self.serializer_class(
-            instance=qureyset, many=True)
-        return Response(data=serializer_for_folder.data, status=status.HTTP_200_OK)
+        try:
+            qureyset = [Folder.objects.get(tag=folder_tag)]
+            serializer_for_folder = self.serializer_class(
+                instance=qureyset, many=True)
+            return Response(data=serializer_for_folder.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    
+
+class FolderGetByVIN(APIView):
+    serializer_class = FolderReadSerializer
+
+    def get(self, request, vin):
+        try:
+            qureyset = [Folder.objects.get(VIN=vin)]
+            serializer_for_folder = self.serializer_class(
+                instance=qureyset, many=True)
+            return Response(data=serializer_for_folder.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class IMGCreate(APIView):
@@ -124,7 +134,7 @@ class IMGGetById(APIView):
         serilaizer_for_img = self.serializer_class(
             instance=queryset, many=False)
         return Response(data=serilaizer_for_img.data, status=status.HTTP_200_OK)
-    
+
 
 class HotPointCreate(APIView):
     serializer_class = Hot_pointSerializer
@@ -145,3 +155,56 @@ class HotPointOnIMGList(APIView):
         serializer_for_hotpoint = self.serializer_class(
             instance=queryset, many=True)
         return Response(data=serializer_for_hotpoint.data, status=status.HTTP_200_OK)
+
+
+class TestDataCreate(APIView):
+
+    def get(self, request, type_of_data):
+        if type_of_data == 'shop':
+            # Создаём главную папку
+            home = Folder.objects.create()
+            home.tag = 'home'
+            home.save()
+
+            # Создаём папку с сельскохозяйственной техникой
+            agro = Folder.objects.create()
+            agro.tag = 'agro'
+            agro.parent.set([home])
+            agro.description = {"name": "Сельскохозяйственная техника"}
+            agro.save()
+            # Генерируем сельскохозяйственную технику
+            for i in range(5):
+                trctr = Folder.objects.create()
+                trctr.tag = 'card'
+                trctr.parent.set([agro])
+                trctr.description = {"name": f"K{i}"}
+                trctr.save()
+
+            # Создаём папку с Строительной техникой
+            buil = Folder.objects.create()
+            buil.tag = 'buil'
+            buil.parent.set([home])
+            buil.description = {"name": "Строительная техника"}
+            buil.save()
+            # Генерируем Строительную технику
+            for i in range(5):
+                trctr = Folder.objects.create()
+                trctr.tag = 'card'
+                trctr.parent.set([buil])
+                trctr.description = {"name": f"K{i}"}
+                trctr.save()
+
+            # Создаём папку с Специальной техникой
+            spec = Folder.objects.create()
+            spec.tag = 'spec'
+            spec.parent.set([home])
+            spec.description = {"name": "Специальная техника"}
+            spec.save()
+            # Генерируем Специальную технику
+            for i in range(5):
+                trctr = Folder.objects.create()
+                trctr.tag = 'card'
+                trctr.parent.set([spec])
+                trctr.description = {"name": f"K{i}"}
+                trctr.save()
+        return Response(status=status.HTTP_200_OK)

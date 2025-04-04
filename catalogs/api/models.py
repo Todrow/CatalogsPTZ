@@ -17,8 +17,8 @@ class Detail(models.Model):
 
 class Folder(models.Model):
     tag = models.CharField(max_length=4)
-    VIN = models.CharField(max_length=50, null=True)
-    description = models.TextField(blank=True)
+    VIN = models.CharField(max_length=50, null=True, unique=True, db_index=True)
+    description = models.JSONField(blank=True, null=True)
     parent = models.ManyToManyField("api.Folder", verbose_name=(
         "parent"), blank=True, related_name='childs')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -31,7 +31,8 @@ class Folder(models.Model):
 class IMG(models.Model):
     folder = models.OneToOneField(
         "api.Folder", on_delete=models.CASCADE, related_name='IMG')
-    path = models.TextField((""), blank=False)
+    image = models.ImageField(
+        upload_to='imges/', height_field=100, width_field=100, null=False)
 
     def __str__(self):
         return str(str(self.folder) + ": " + self.path)

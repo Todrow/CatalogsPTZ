@@ -29,8 +29,8 @@ class FolderReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Folder
-        depth = 1
-        fields = ['id', 'tag', 'VIN', 'description', 'parent', 'IMG', 'childs']
+        depth = 0
+        fields = ['id', 'tag', 'VIN', 'description', 'created_at', 'updated_at', 'parent', 'IMG', 'childs']
 
 
 class IMGSerializer(serializers.ModelSerializer):
@@ -38,7 +38,7 @@ class IMGSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = IMG
-        fields = ['id', 'folder', 'path', 'hot_points']
+        fields = ['id', 'folder', 'image', 'hot_points']
 
 
 class Hot_pointSerializer(serializers.ModelSerializer):
